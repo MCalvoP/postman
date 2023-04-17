@@ -10,12 +10,12 @@ app.use(express.urlencoded({ extended: true })) //Permite poder realizar consult
 const productManager = new ProductManager('./productos.txt')
 
 app.get("/product", async (req, res) => {
-    const products = await productManager.getProducts()
-    res.send(products)
+    const product = await productManager.getProducts()
+    res.send(product)
 })
 
-app.get("/product/:id", async (req, res) => {
-    const product = await productManager.getProductById(req.params.id)
+app.get("/product/:idProduct", async (req, res) => {
+    const product = await productManager.getProductsById(req.params.id)
     res.send(product)
 })
 
@@ -29,7 +29,7 @@ app.put("/product/:id", async (req, res) => {
     const id = req.params.id
     const { title, description, price, thumbnail, code, stock } = req.body
 
-    const mensaje = await productManager.updateProduct(id, { title, description, price, thumbnail, code, stock })
+    const mensaje = await productManager.getProductsById(id, { title, description, price, thumbnail, code, stock })
 
     res.send(mensaje)
 })
