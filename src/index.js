@@ -21,7 +21,7 @@ app.get("/product/:idProduct", async (req, res) => {
 
 app.post("/product", async (req, res) => {
     const { title, description, price, thumbnail, code, stock } = req.body
-    await productManager.addProduct({ title, description, price, thumbnail, code, stock })
+    await productManager.addProduct( title, description, price, thumbnail, code, stock )
     res.send("Producto creado")
 })
 
