@@ -36,7 +36,7 @@ app.put("/product/:id", async (req, res) => {
 
 app.delete("/product/:id", async (req, res) => {
     const id = req.params.id
-    const mensaje = await productManager.deleteProduct(id)
+    const mensaje = await productManager.deleteProductById(id)
     res.send(mensaje)
 })
 
