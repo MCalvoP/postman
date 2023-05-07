@@ -27,9 +27,22 @@ export class ProductManager {
         await fs.writeFile(this.path, JSON.stringify(this.products))
     }
 
-    readProducts = async () =>{
-        let respuesta = await fs.readFile(this.path, 'utf-8')
-        return JSON.parse(respuesta)
+    async updateProduct(id, { title, description, price, thumbnail, code, stock }) {
+        const prodsJSON = await fs.readFile(this.path, 'utf-8')
+        const prods = JSON.parse(prodsJSON)
+        if (prods.some(prod => prod.id === parseInt(id))) {
+            let index = prods.findIndex(prod => prod.id === parseInt(id))
+            prods[index].title = title
+            prods[index].description = description
+            prods[index].price = price
+            prods[index].thumbnail = thumbnail
+            prods[index].code = code
+            prods[index].stock = stock
+            await fs.writeFile(this.path, JSON.stringify(prods))
+            return "Producto actualizado"
+        } else {
+            return "Producto no encontrado"
+        }
     }
     
 
@@ -39,8 +52,8 @@ export class ProductManager {
     }
 
     getProductsById = async (id) => {
-        const respuesta0 = await fs.readFile(this.path, 'utf-8')
-        const respuesta3 = JSON.parse(respuesta0)
+        let respuesta0 = await fs.readFile(this.path, 'utf-8')
+        let respuesta3 = JSON.parse(respuesta0)
         if (respuesta3.find(product => product.id == id)){
             return(respuesta3.find(product => product.id == id));
         }else{
@@ -49,9 +62,13 @@ export class ProductManager {
     }
         
      deleteProductById = async (id) =>{
-         let respuesta3 = await this.readProducts()
+         let respuesta3 = await this.getProducts()
          let productFilter = respuesta3.filter(products => products.id != id)
-         await fs.writeFile(this.path, JSON.stringify(productFilter))
-         return "Producto eliminado"
+         if (await fs.writeFile(this.path, JSON.stringify(productFilter))){
+            return "Producto eliminado"
+         }else {
+            return "Producto no encontrado"
+         }
+         
      }
     }
