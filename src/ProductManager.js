@@ -61,14 +61,15 @@ export class ProductManager {
         }
     }
         
-     deleteProductById = async (id) =>{
-         let respuesta3 = await this.getProducts()
-         let productFilter = respuesta3.filter(products => products.id != id)
-         if (await fs.writeFile(this.path, JSON.stringify(productFilter))){
+    async deleteProductById(id) {
+        const prodsJSON = await fs.readFile(this.path, 'utf-8')
+        const prods = JSON.parse(prodsJSON)
+        if (prods.some(prod => prod.id === parseInt(id))) {
+            const prodsFiltrados = prods.filter(prod => prod.id !== parseInt(id))
+            await fs.writeFile(this.path, JSON.stringify(prodsFiltrados))
             return "Producto eliminado"
-         }else {
+        } else {
             return "Producto no encontrado"
-         }
-         
-     }
+        }
+    }
     }
